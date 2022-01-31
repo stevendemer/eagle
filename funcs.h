@@ -5,6 +5,11 @@
 #include <stdlib.h>
 #include <math.h>
 
+/**
+ * 	TODO: FIX THE FIND TIMELY FUNCTION
+ * 	TODO: FIX THE FIND LOCATION FUNCTION
+ * 
+**/
 
 struct route 
 {
@@ -91,7 +96,7 @@ void printData(struct route routes[500], int size)
         printf("From %s to %s\nUphill %d, Downhill %d\nMax altitude %d, Min altitude %d\nLength %d, Estimated time %d min\n", 
                 routes[i].start, routes[i].end, routes[i].uphill, routes[i].downhill, routes[i].max_height, routes[i].min_height, 
                 routes[i].len, result);
-        printf("\n");
+        // printf("\n");
 
 		if (!checkCirc(routes[i]))
 		{
@@ -99,36 +104,36 @@ void printData(struct route routes[500], int size)
 			printf("\nFrom %s to %s\nUphill %d, Downhill %d\nMax altitude %d, Min altitude %d\nLength %d, Estimated time %d min\n", 
                 routes[i].end, routes[i].start, routes[i].downhill, routes[i].uphill, routes[i].max_height, routes[i].min_height, 
                 routes[i].len, result);
-			printf("\n");
+			// printf("\n");
 		}
 	}
 }
 
 
-int readFromInput(struct route routes[500])
-{
-    int n;
-    scanf("%d", &n);
-    for (int i = 0;i < n;++i)
-    {
-        // printf("Enter the beginning:\n");
-        scanf(" ");
-        fgets(routes[i].start, 50, stdin);
-        // printf("Enter the length, uphill downhill climb, the max height and the min height:\n");
-        scanf("%d %d %d %d %d", &routes[i].len, &routes[i].uphill, &routes[i].downhill, &routes[i].max_height, &routes[i].min_height);
-        // printf("Enter the ending: \n");
-        scanf(" ");
-        fgets(routes[i].end, 50, stdin);
-    }
-    return n;
-}
+// int readFromInput(struct route routes[500])
+// {
+//     int n;
+//     scanf("%d", &n);
+//     for (int i = 0;i < n;++i)
+//     {
+//         // printf("Enter the beginning:\n");
+//         scanf(" ");
+//         fgets(routes[i].start, 50, stdin);
+//         // printf("Enter the length, uphill downhill climb, the max height and the min height:\n");
+//         scanf("%d %d %d %d %d", &routes[i].len, &routes[i].uphill, &routes[i].downhill, &routes[i].max_height, &routes[i].min_height);
+//         // printf("Enter the ending: \n");
+//         scanf(" ");
+//         fgets(routes[i].end, 50, stdin);
+//     }
+//     return n;
+// }
 
 
 void findShort(struct route routes[500], int size)
 {
 	int k;
 	scanf("%d", &k);
-	size_t n = sizeof(routes) / sizeof(routes[0]);
+	// size_t n = sizeof(routes) / sizeof(routes[0]);
 	qsort(routes, size, sizeof(struct route), comp_func);
 
 	for (int i = 0;i < size; ++i)
@@ -155,33 +160,39 @@ void findShort(struct route routes[500], int size)
 	}
 }
 
-
 void findLocation(struct route routes[500], int size)
 {
 	char d[50];
 	fgets(d, 50, stdin);
+	int result;
 
-	size_t n = sizeof(routes) / sizeof(routes[0]);
+	d[strcspn(d, "\n")] = 0;
+
+	// size_t n = sizeof(routes) / sizeof(routes[0]);
 	qsort(routes, size, sizeof(struct route), comp_func);
 
 	for (int i = 0;i < size; ++i)
 	{
 		remove_newline(&routes[i]);
 
-		if (strcmp(routes[i].start, d) == 0)
+		if (strcmp(routes[i].start, d) == 0 && strcmp(routes[i].end, d) == 0)
 		{
-			int result = get_time(routes[i], routes[i].uphill);
+			result = get_time(routes[i], routes[i].uphill);
+
 			printf("From %s to %s\nUphill %d, Downhill %d\nMax altitude %d, Min altitude %d\nLength %d, Estimated time %d min\n", 
                 routes[i].start, routes[i].end, routes[i].uphill, routes[i].downhill, routes[i].max_height, routes[i].min_height, 
                 routes[i].len, result);
+			printf("\n");
 		}
-		else if (strcmp(routes[i].end, d) == 0)
+
+		else if (strcmp(routes[i].start, d) != 0 && strcmp(routes[i].end, d) == 0)
 		{
-			int result = get_time(routes[i], routes[i].downhill);
+			result = get_time(routes[i], routes[i].downhill);
 
 			printf("From %s to %s\nUphill %d, Downhill %d\nMax altitude %d, Min altitude %d\nLength %d, Estimated time %d min\n", 
-                routes[i].end, routes[i].start, routes[i].downhill, routes[i].uphill, routes[i].max_height, routes[i].min_height, 
+	            routes[i].end, routes[i].start, routes[i].downhill, routes[i].uphill, routes[i].max_height, routes[i].min_height, 
                 routes[i].len, result);
+			printf("\n");
 		}
 	}
 }
@@ -189,7 +200,7 @@ void findLocation(struct route routes[500], int size)
 
 void findUpHill(struct route routes[500], int size)
 {
-	size_t n = sizeof(routes) / sizeof(routes[0]);
+	// size_t n = sizeof(routes) / sizeof(routes[0]);
 	qsort(routes, size, sizeof(struct route), comp_func);
 
 	int result;
@@ -224,7 +235,7 @@ void findUpHill(struct route routes[500], int size)
 
 void findDownHill(struct route routes[500], int size)
 {
-	size_t n = sizeof(routes) / sizeof(routes[0]);
+	// size_t n = sizeof(routes) / sizeof(routes[0]);
 	qsort(routes, size, sizeof(struct route), comp_func);
 
 	int result;
@@ -264,7 +275,7 @@ void findAltitude(struct route routes[500], int size)
 	int min, max;
 	scanf("%d %d", &min, &max);
 
-	size_t n = sizeof(routes) / sizeof(routes[0]);
+	// size_t n = sizeof(routes) / sizeof(routes[0]);
 	qsort(routes, size, sizeof(struct route), comp_func);
 
 	for (int i = 0;i < size; ++i)
@@ -291,21 +302,21 @@ void findAltitude(struct route routes[500], int size)
 	}
 }
 
+
 double real_time(struct route route, int up)
 {
-	double delay, t, x;
+	double delay, t;
 	delay = route.len / 65.0;
 	t = up / 10.0;
 	return delay + t;
 }
-
 
 void findTimely(struct route routes[500], int size)
 {
 	int t;
 	scanf("%d", &t);
 
-	size_t n = sizeof(routes) / sizeof(routes[0]);
+	// size_t n = sizeof(routes) / sizeof(routes[0]);
 	qsort(routes, size, sizeof(struct route), comp_func);
 
 	for (int i = 0;i < size; ++i)
@@ -315,13 +326,14 @@ void findTimely(struct route routes[500], int size)
 		
 		remove_newline(&routes[i]);
 
+		// printf("The real time is %lf and the time is %d \n", res, x);
+
 		if (res <= t)
 		{
 			printf("From %s to %s\nUphill %d, Downhill %d\nMax altitude %d, Min altitude %d\nLength %d, Estimated time %d min\n", 
 			routes[i].start, routes[i].end, routes[i].uphill, routes[i].downhill, routes[i].max_height, routes[i].min_height, 
 			routes[i].len, x);
 			printf("\n");
-
 
 			if (!checkCirc(routes[i]))
 			{
@@ -334,11 +346,153 @@ void findTimely(struct route routes[500], int size)
 					routes[i].end, routes[i].start, routes[i].downhill, routes[i].uphill, routes[i].max_height, routes[i].min_height, 
 					routes[i].len, x);
 					printf("\n");
-
 				}
 			}
 		}
 	}
+}
+
+
+// PART 2 STARTS HERE
+// Read a number from the text file 
+// read n routes from the file
+// close the file
+// int readFromFile(struct route routes[500])
+// {
+// 	int n;
+// 	char filename[50];
+// 	fgets(filename, 50, stdin);
+
+// 	filename[strcspn(filename, "\n")] = 0;
+
+// 	FILE *fp;
+
+// 	fp = fopen(filename, "r");
+
+// 	if (fp == NULL)
+// 	{
+// 		printf("Error opening the text file! \nExiting...\n");
+// 		return -1;
+// 	}
+// 	else
+// 	{
+// 		fscanf(fp, "%d", &n);
+// 		for (int i = 0;i < n; ++i)
+// 		{
+// 			fscanf(fp, "%s", routes[i].start);
+// 			fscanf(fp, "%d %d %d %d %d", &routes[i].len, &routes[i].uphill, &routes[i].downhill, &routes[i].max_height, &routes[i].min_height);
+// 			fscanf(fp, "%s", routes[i].end);
+// 		}
+// 	}
+
+// 	fclose(fp);
+
+// 	return n;
+// }
+
+
+void saveData(struct route routes[500], int n)
+{
+	char str[50];
+	fgets(str, 50, stdin);
+
+	str[strcspn(str, "\n")] = 0;
+
+	// sorting the routes in descending order 
+	qsort(routes, n, sizeof(struct route), comp_func);
+
+	FILE *fp;
+
+	fp = fopen(str, "w+");
+
+	if (fp == NULL)
+	{
+		printf("Error opening the file!\nExiting...");
+		return;
+	}
+	else
+	{
+		for (int i = 0;i < n; ++i)
+		{
+			int result = get_time(routes[i], routes[i].uphill);
+			remove_newline(&routes[i]);
+
+			fprintf(fp, "From %s to %s\nUphill %d, Downhill %d\nMax altitude %d, Min altitude %d\nLength %d, Estimated time %d min\n", 
+					routes[i].start, routes[i].end, routes[i].uphill, routes[i].downhill, routes[i].max_height, routes[i].min_height, routes[i].len,
+					result);
+			fprintf(fp, "\n");
+
+			if (!checkCirc(routes[i]))
+			{
+				result = get_time(routes[i], routes[i].downhill);
+				fprintf(fp, "From %s to %s\nUphill %d, Downhill %d\nMax altitude %d, Min altitude %d\nLength %d, Estimated time %d min\n", 
+					routes[i].end, routes[i].start, routes[i].downhill, routes[i].uphill, routes[i].max_height, routes[i].min_height, routes[i].len,
+					result);
+				fprintf(fp, "\n");
+			}
+		}
+	}
+
+	fclose(fp);
+}
+
+
+struct route* readFromInput(int *k)
+{
+	int n;
+	scanf("%d", &n);
+
+	struct route* routes = (struct route*)malloc(sizeof(struct route) * (n+1));
+
+	 for (int i = 0;i < n;++i)
+    {
+        // printf("Enter the beginning:\n");
+        scanf(" ");
+        fgets(routes[i].start, 50, stdin);
+        // printf("Enter the length, uphill downhill climb, the max height and the min height:\n");
+        scanf("%d %d %d %d %d", &routes[i].len, &routes[i].uphill, &routes[i].downhill, &routes[i].max_height, &routes[i].min_height);
+        // printf("Enter the ending: \n");
+        scanf(" ");
+        fgets(routes[i].end, 50, stdin);
+    }
+
+    *k = n;
+
+    return routes;
+}
+
+
+struct route* readFromFile(int *n)
+{
+	int k;
+	char str[50];
+	fgets(str, 50, stdin);
+
+	FILE *fp;
+
+	str[strcspn(str, "\n")] = 0;
+
+	fp = fopen(str, "r");
+
+	if (fp == NULL)
+	{
+		printf("Error opening the file!\nExiting...");
+		return NULL;
+	}
+	else
+	{
+		fscanf(fp, "%d", &k);
+
+		struct route* routes = (struct route*)malloc(sizeof(struct route) * (k+1));
+
+		for (int i = 0;i < k; ++i)
+		{
+ 			fscanf(fp, "%s", routes[i].start);
+ 			fscanf(fp, "%d %d %d %d %d", &routes[i].len, &routes[i].uphill, &routes[i].downhill, &routes[i].max_height, &routes[i].min_height);
+ 			fscanf(fp, "%s", routes[i].end);
+		}
+	}
+	*n = k;
 }
 
 
